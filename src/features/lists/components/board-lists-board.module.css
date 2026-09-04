@@ -1,0 +1,32 @@
+/* Canvas: scroll horizontal propio, altura acotada por el shell del board.
+   `min-height: 0` es obligatorio — sin él el hijo flex se niega a encogerse y
+   vuelve a scrollear la página. */
+.canvas {
+  display: flex;
+  align-items: flex-start;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: var(--mantine-spacing-md);
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: var(--mantine-spacing-md) var(--mantine-spacing-lg);
+  scrollbar-gutter: stable;
+  overscroll-behavior-x: contain;
+}
+
+.state {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  align-items: center;
+  justify-content: center;
+  padding: var(--mantine-spacing-xl) var(--mantine-spacing-lg);
+}
+
+@media (max-width: 640px) {
+  .canvas {
+    padding-inline: var(--mantine-spacing-md);
+    scroll-snap-type: x mandatory;
+  }
+}

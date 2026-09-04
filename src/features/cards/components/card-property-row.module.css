@@ -1,0 +1,28 @@
+.row {
+  display: grid;
+  grid-template-columns: 128px 1fr;
+  align-items: start;
+  gap: var(--mantine-spacing-md);
+  min-height: 32px;
+}
+
+.label {
+  padding-top: 6px;
+  font-size: var(--mantine-font-size-sm);
+  color: var(--tr-text-secondary);
+}
+
+.value {
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .label {
+    padding-top: 0;
+  }
+}

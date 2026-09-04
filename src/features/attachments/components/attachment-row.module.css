@@ -1,0 +1,42 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+}
+
+.icon {
+  flex-shrink: 0;
+  display: flex;
+  color: var(--tr-text-tertiary);
+}
+
+.info {
+  min-width: 0;
+  flex: 1;
+}
+
+.name {
+  overflow-wrap: anywhere;
+}
+
+/* Igual que en comentarios: las acciones aparecen al hover o al enfocar con
+   teclado, y quedan fijas donde no hay hover (touch). */
+.actions {
+  flex-shrink: 0;
+  margin-left: auto;
+  display: flex;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity var(--tr-motion-fast) var(--tr-motion-ease);
+}
+
+.row:hover .actions,
+.actions:focus-within {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .actions {
+    opacity: 1;
+  }
+}

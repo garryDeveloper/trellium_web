@@ -1,0 +1,18 @@
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: var(--mantine-radius-sm);
+  color: var(--tr-text-secondary);
+  font-size: var(--mantine-font-size-md);
+  transition:
+    background-color var(--tr-motion-fast) var(--tr-motion-ease),
+    color var(--tr-motion-fast) var(--tr-motion-ease);
+}
+
+.trigger:hover {
+  background-color: var(--tr-surface-hover);
+  color: var(--tr-text-primary);
+}

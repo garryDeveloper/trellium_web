@@ -1,0 +1,66 @@
+/* Mantine se carga en su propia capa (styles.layer.css): todo lo que escribimos
+   fuera de capa le gana siempre, sin depender del orden del bundle ni de
+   `!important`. */
+@layer mantine;
+
+/* `color-scheme` lo maneja Mantine desde dentro de su capa
+   (`:root { color-scheme: var(--mantine-color-scheme) }`). Fijarlo acá, fuera
+   de capa, le ganaba siempre y dejaba los widgets nativos —scrollbars, inputs
+   de fecha— en claro aunque la app estuviera en oscuro. */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background-color: var(--tr-surface-canvas);
+  color: var(--tr-text-primary);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tracking negativo progresivo: Inter necesita apretarse a medida que crece.
+   Sin esto los títulos se leen sueltos. */
+h1 {
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  letter-spacing: -0.015em;
+}
+
+h3 {
+  letter-spacing: -0.01em;
+}
+
+h4,
+h5 {
+  letter-spacing: -0.005em;
+}
+
+/* Requisito de ui-guidelines.md que no se estaba respetando. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.board-card {
+  transition:
+    box-shadow var(--tr-motion-fast) var(--tr-motion-ease),
+    border-color var(--tr-motion-fast) var(--tr-motion-ease);
+}
+
+.board-card:hover {
+  box-shadow: var(--mantine-shadow-sm);
+  border-color: var(--tr-border-strong);
+}

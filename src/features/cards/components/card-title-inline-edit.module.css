@@ -1,0 +1,17 @@
+.trigger {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  cursor: text;
+}
+
+.title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.form {
+  width: 100%;
+  min-width: 0;
+}

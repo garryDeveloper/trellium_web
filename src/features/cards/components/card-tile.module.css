@@ -1,0 +1,136 @@
+/* Objeto manipulable: se define por borde + elevación, sobre el relleno hundido
+   de la columna. La card nunca cambia su fondo por estado de contenido — una
+   tarjeta vencida es una card normal con un chip rojo. */
+.card {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  text-align: left;
+  border: 1px solid var(--tr-border-default);
+  border-radius: var(--mantine-radius-md);
+  background-color: var(--tr-surface-raised);
+  box-shadow: var(--mantine-shadow-xs);
+  cursor: pointer;
+  transition:
+    border-color var(--tr-motion-fast) var(--tr-motion-ease),
+    box-shadow var(--tr-motion-fast) var(--tr-motion-ease),
+    transform var(--tr-motion-base) var(--tr-motion-ease);
+}
+
+.card:hover {
+  border-color: var(--tr-border-strong);
+  box-shadow: var(--mantine-shadow-sm);
+  transform: translateY(-1px);
+}
+
+.card:active {
+  transform: translateY(0);
+  box-shadow: var(--mantine-shadow-xs);
+}
+
+/* La copia que sigue al cursor: opaca y despegada, para leerse por encima de
+   las columnas mientras el original queda atrás al 60%. */
+.dragPreview {
+  box-shadow: var(--mantine-shadow-xl);
+  cursor: grabbing;
+  transform: rotate(1.5deg);
+}
+
+/* Anillo con offset en la superficie hundida de la columna, para que se lea
+   sobre el fondo real donde vive la card. */
+.card:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--tr-surface-sunken),
+    0 0 0 4px var(--tr-accent);
+}
+
+.dragging {
+  opacity: 0.6;
+}
+
+.labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.title {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: var(--mantine-font-size-md);
+  font-weight: 500;
+  line-height: 1.4286;
+  color: var(--tr-text-primary);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Se revela con hover o foco: con 40 tarjetas en pantalla, 40 menús siempre
+   visibles son ruido. */
+.menu {
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity var(--tr-motion-fast) var(--tr-motion-ease);
+}
+
+.card:hover .menu,
+.menu:focus-visible {
+  opacity: 1;
+}
+
+/* Fila de metadatos: un solo slot extensible. Sumar prioridad, checklist,
+   comentarios o adjuntos es agregar una entrada, no rediseñar la card. */
+.meta {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+  margin-top: 8px;
+}
+
+.due {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--tr-text-secondary);
+}
+
+.dueWarning {
+  color: var(--tr-status-warning);
+}
+
+.dueDanger {
+  color: var(--tr-status-danger);
+}
+
+.assignees {
+  margin-inline-start: auto;
+}
+
+/* Progreso de checklist sin abrir la tarjeta (ui-guidelines.md → interaction
+   patterns). Comparte la forma de `.due` para que la fila de meta se lea pareja. */
+.checklist {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--mantine-font-size-xs);
+  color: var(--tr-text-secondary);
+}
+
+.checklistDone {
+  color: var(--tr-status-success);
+}

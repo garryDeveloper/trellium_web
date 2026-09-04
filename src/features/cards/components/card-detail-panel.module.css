@@ -1,0 +1,83 @@
+/* El content del Drawer ya es `height: 100%` con `overflow-y: auto`; acotamos acá
+   para que el único scroller sea `.scroll` y la barra fija no se vaya con él. */
+.body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Barra fija: acá vive el botón de cerrar, que antes desaparecía justo cuando
+   la tarjeta terminaba de cargar. */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 auto;
+  gap: var(--mantine-spacing-sm);
+  height: 56px;
+  padding-inline: var(--mantine-spacing-xl);
+  border-bottom: 1px solid var(--tr-border-subtle);
+  background-color: var(--tr-surface-raised);
+}
+
+/* El título vive acá y se lleva el espacio sobrante; la badge y el botón de
+   cerrar no se encogen. */
+.headerMain {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.headerClose {
+  flex: 0 0 auto;
+}
+
+.scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--mantine-spacing-xl);
+}
+
+/* Medida de lectura acotada: descripciones y, más adelante, comentarios. */
+.reading {
+  max-width: 68ch;
+}
+
+.properties {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mantine-spacing-md);
+}
+
+.sectionLabel {
+  margin: 0 0 var(--mantine-spacing-sm);
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 500;
+  color: var(--tr-text-secondary);
+}
+
+@media (max-width: 640px) {
+  .header,
+  /* El título vive acá y se lleva el espacio sobrante; la badge y el botón de
+   cerrar no se encogen. */
+.headerMain {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.headerClose {
+  flex: 0 0 auto;
+}
+
+.scroll {
+    padding-inline: var(--mantine-spacing-lg);
+  }
+}

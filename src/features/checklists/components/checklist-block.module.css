@@ -1,0 +1,40 @@
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--mantine-spacing-xs);
+  padding-block: 2px;
+}
+
+.itemLabel {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Un ítem completado se atenúa, pero el estado real lo lleva el checkbox
+   (`aria-checked`), no el color — ver Accesibilidad en ui-guidelines.md. */
+.itemDone {
+  color: var(--tr-text-tertiary);
+  text-decoration: line-through;
+}
+
+.itemRemove {
+  flex-shrink: 0;
+  margin-left: auto;
+  opacity: 0;
+  transition: opacity var(--tr-motion-fast) var(--tr-motion-ease);
+}
+
+.item:hover .itemRemove,
+.itemRemove:focus-visible {
+  opacity: 1;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-xs);
+}
+
+.headerActions {
+  margin-left: auto;
+}

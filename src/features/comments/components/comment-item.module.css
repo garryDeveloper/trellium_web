@@ -1,0 +1,45 @@
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--mantine-spacing-sm);
+}
+
+.content {
+  min-width: 0;
+  flex: 1;
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--mantine-spacing-xs);
+}
+
+/* El texto del comentario respeta los saltos de línea que escribió el autor y
+   corta palabras largas (URLs) antes que desbordar el panel. */
+.body {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* Las acciones aparecen al hover o al enfocar con teclado; en touch no hay
+   hover, así que ahí quedan siempre visibles. */
+.actions {
+  flex-shrink: 0;
+  margin-left: auto;
+  display: flex;
+  gap: 2px;
+  opacity: 0;
+  transition: opacity var(--tr-motion-fast) var(--tr-motion-ease);
+}
+
+.item:hover .actions,
+.actions:focus-within {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .actions {
+    opacity: 1;
+  }
+}

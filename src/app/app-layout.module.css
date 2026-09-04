@@ -1,0 +1,40 @@
+.header {
+  background-color: var(--tr-surface-raised);
+}
+
+.headerInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mantine-spacing-md);
+  height: 100%;
+  padding-inline: var(--mantine-spacing-lg);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-sm);
+  padding: 4px 6px;
+  margin-inline-start: -6px;
+  border-radius: var(--mantine-radius-sm);
+  transition: background-color var(--tr-motion-fast) var(--tr-motion-ease);
+}
+
+.brand:hover {
+  background-color: var(--tr-surface-hover);
+}
+
+/* La marca lleva el acento; el wordmark va en tinta. Todo ciruela se lee
+   decorativo, y en este sistema el color significa. */
+.brandIcon {
+  display: flex;
+  color: var(--tr-accent);
+}
+
+.brandName {
+  font-size: var(--mantine-font-size-lg);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--tr-text-primary);
+}

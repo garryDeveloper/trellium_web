@@ -1,0 +1,31 @@
+/* Hermano de la toolbar en el mismo flex column del tablero: la barra empuja al
+   canvas hacia abajo en vez de flotar encima, para que no tape una columna. */
+.bar {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: var(--mantine-spacing-sm);
+  padding: 6px var(--mantine-spacing-lg);
+  border-bottom: 1px solid var(--tr-accent-border);
+  background-color: var(--tr-accent-subtle);
+}
+
+.chips {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+
+.count {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 640px) {
+  .bar {
+    padding-inline: var(--mantine-spacing-md);
+  }
+}

@@ -1,0 +1,83 @@
+/* Contenedor hundido: se define por relleno, sin borde ni sombra. Los objetos
+   manipulables (cards) son los que se definen por borde + elevación. */
+.column {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 var(--tr-column-width);
+  max-height: 100%;
+  border-radius: var(--mantine-radius-lg);
+  background-color: var(--tr-surface-sunken);
+}
+
+.columnDragging {
+  opacity: 0.6;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 6px;
+  min-width: 0;
+  padding: 10px 10px 8px;
+}
+
+/* El grip aparece con el hover o el foco: en reposo el elemento de mayor
+   contraste de la columna debe ser su nombre, no un affordance de arrastre. */
+.grip {
+  flex-shrink: 0;
+  opacity: 0;
+  cursor: grab;
+  touch-action: none;
+  transition: opacity var(--tr-motion-fast) var(--tr-motion-ease);
+}
+
+.column:hover .grip,
+.column:focus-within .grip {
+  opacity: 1;
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+}
+
+.count {
+  flex-shrink: 0;
+  padding-inline: 2px;
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--tr-text-tertiary);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: var(--mantine-spacing-sm);
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  padding-inline: 10px;
+}
+
+.empty {
+  padding: var(--mantine-spacing-md) 0;
+  text-align: center;
+  font-size: var(--mantine-font-size-sm);
+  color: var(--tr-text-tertiary);
+}
+
+/* Se queda fijo al pie de la columna en vez de irse con el scroll de tarjetas. */
+.footer {
+  flex: 0 0 auto;
+  padding: 8px 10px 10px;
+}
+
+@media (max-width: 640px) {
+  .column {
+    flex-basis: calc(100vw - 2 * var(--mantine-spacing-md));
+    scroll-snap-align: start;
+  }
+}

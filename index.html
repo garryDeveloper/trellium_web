@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trellium</title>
+    <!-- Equivalente al <ColorSchemeScript /> de Mantine, inline porque esto es
+         una SPA de Vite sin SSR donde no hay forma de renderear en el <head>.
+         Corre antes del primer paint: sin esto la app pinta en claro y salta a
+         oscuro cuando React monta. La clave de localStorage y el nombre del
+         atributo son los que usa Mantine por defecto. -->
+    <script>
+      try {
+        var stored = window.localStorage.getItem('mantine-color-scheme-value')
+        var scheme =
+          stored === 'light' || stored === 'dark' || stored === 'auto'
+            ? stored
+            : 'auto'
+        document.documentElement.setAttribute(
+          'data-mantine-color-scheme',
+          scheme !== 'auto'
+            ? scheme
+            : window.matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'dark'
+              : 'light',
+        )
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+/* Columna fantasma: enseña la estructura del board además de pedir la acción. */
+.ghost {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 var(--tr-column-width);
+  padding: 12px;
+  border: 1px dashed var(--tr-border-strong);
+  border-radius: var(--mantine-radius-lg);
+  color: var(--tr-text-secondary);
+  font-size: var(--mantine-font-size-md);
+  transition:
+    border-color var(--tr-motion-fast) var(--tr-motion-ease),
+    background-color var(--tr-motion-fast) var(--tr-motion-ease);
+}
+
+.ghost:hover {
+  border-color: var(--tr-accent-border);
+  background-color: var(--tr-surface-hover);
+  color: var(--tr-text-primary);
+}
+
+.form {
+  flex: 0 0 var(--tr-column-width);
+  padding: 10px;
+  border-radius: var(--mantine-radius-lg);
+  background-color: var(--tr-surface-sunken);
+}

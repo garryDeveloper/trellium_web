@@ -1,0 +1,41 @@
+.row {
+  display: flex;
+  gap: var(--mantine-spacing-sm);
+  padding: var(--mantine-spacing-sm);
+  border-radius: var(--mantine-radius-sm);
+  text-align: left;
+  width: 100%;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  background-color: var(--tr-surface-sunken, var(--mantine-color-default-hover));
+}
+
+/* El punto es un refuerzo del peso tipográfico, no el único indicador: el
+   estado también va en el `aria-label` de la fila. */
+.unreadDot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  margin-top: 6px;
+  border-radius: 50%;
+  background-color: var(--mantine-color-primary-filled);
+}
+
+.readSpacer {
+  flex-shrink: 0;
+  width: 8px;
+}
+
+.content {
+  min-width: 0;
+  flex: 1;
+}
+
+.text {
+  overflow-wrap: anywhere;
+}

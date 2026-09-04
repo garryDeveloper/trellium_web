@@ -1,0 +1,11 @@
+/* Peso 500 en botones: 600 en controles chicos lee pesado y "web". */
+.button {
+  font-weight: 500;
+}
+
+/* Tooltip sobre superficie invertida — no negro puro, que se lee como agujero. */
+.tooltip {
+  background-color: var(--tr-surface-inverse);
+  color: var(--tr-text-on-inverse);
+  font-weight: 500;
+}

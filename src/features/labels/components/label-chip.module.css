@@ -1,0 +1,26 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+  padding: 2px 8px;
+  border-radius: var(--mantine-radius-sm);
+  color: var(--tr-label-text);
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 500;
+  line-height: 1.3333;
+}
+
+.xs {
+  padding: 1px 6px;
+}
+
+.name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.remove {
+  color: var(--tr-label-text);
+}

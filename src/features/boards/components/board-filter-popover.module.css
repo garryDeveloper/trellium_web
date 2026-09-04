@@ -1,0 +1,17 @@
+/* Contador dentro del botón: no es un Badge de Mantine porque tiene que heredar
+   el color del botón (que cambia según haya o no filtro activo), no imponer uno. */
+.count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  margin-left: 6px;
+  padding-inline: 5px;
+  border-radius: 9px;
+  background-color: var(--tr-accent);
+  color: var(--mantine-color-white);
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
