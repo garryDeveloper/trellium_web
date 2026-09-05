@@ -9,8 +9,8 @@ import {
   UnstyledButton,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { IconBell, IconLogout } from '@tabler/icons-react'
-import { Link, Outlet } from 'react-router-dom'
+import { IconBell, IconChecklist, IconLogout } from '@tabler/icons-react'
+import { Link, NavLink, Outlet } from 'react-router-dom'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import { useLogout } from '@/features/auth/hooks/use-logout'
 import { BrandMark } from './brand-mark'
@@ -19,6 +19,7 @@ import { ColorSchemeToggle } from './color-scheme-toggle'
 import { GlobalSearch } from '@/features/search/components/global-search'
 import { NotificationsPanel } from '@/features/notifications/components/notifications-panel'
 import { useNotifications } from '@/features/notifications/hooks/use-notifications'
+import { MY_WORK_ROUTE } from '@/features/board-views/route'
 import classes from './app-layout.module.css'
 
 export function AppLayout() {
@@ -44,6 +45,21 @@ export function AppLayout() {
             </span>
             <span className={classes.brandName}>Trellium</span>
           </UnstyledButton>
+
+          {/* "Mi trabajo" es una pantalla transversal, al mismo nivel que Mis
+              tableros (T12.4): por eso está en el header y no dentro de un
+              tablero. La marca ya es el enlace a Mis tableros. */}
+          <NavLink
+            to={MY_WORK_ROUTE}
+            className={({ isActive }) =>
+              [classes.navLink, isActive && classes.navLinkActive]
+                .filter(Boolean)
+                .join(' ')
+            }
+          >
+            <IconChecklist size={16} />
+            <span className={classes.navLinkLabel}>Mi trabajo</span>
+          </NavLink>
 
           <GlobalSearch />
 

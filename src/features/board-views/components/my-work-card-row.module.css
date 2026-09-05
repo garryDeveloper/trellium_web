@@ -1,0 +1,84 @@
+/* Misma especie que el resultado de búsqueda: la card del tablero puesta en
+   fila, porque acá el eje de lectura es vertical y lo que importa es llegar al
+   título rápido. */
+.row {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  text-align: left;
+  border: 1px solid var(--tr-border-default);
+  border-radius: var(--mantine-radius-md);
+  background-color: var(--tr-surface-raised);
+  cursor: pointer;
+  transition:
+    border-color var(--tr-motion-fast) var(--tr-motion-ease),
+    box-shadow var(--tr-motion-fast) var(--tr-motion-ease);
+}
+
+.row:hover {
+  border-color: var(--tr-border-strong);
+  box-shadow: var(--mantine-shadow-sm);
+}
+
+.row:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--tr-surface-canvas),
+    0 0 0 4px var(--tr-accent);
+}
+
+.labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--mantine-font-size-md);
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--tr-text-primary);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  margin-top: 6px;
+  font-size: var(--mantine-font-size-xs);
+  color: var(--tr-text-secondary);
+}
+
+.metaItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* El único elemento interactivo dentro de la fila: se distingue del resto de
+   los metadatos, que son texto. */
+.boardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: var(--mantine-radius-sm);
+  color: var(--tr-text-secondary);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.boardLink:hover {
+  color: var(--tr-accent);
+  text-decoration: underline;
+}
+
+.dueWarning {
+  color: var(--tr-status-warning);
+}
+
+.dueDanger {
+  color: var(--tr-status-danger);
+}

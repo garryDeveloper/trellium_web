@@ -1,3 +1,5 @@
+import type { Card } from '@/features/cards/types'
+
 export const BOARD_VIEWS = ['board', 'table', 'calendar'] as const
 export type BoardView = (typeof BOARD_VIEWS)[number]
 
@@ -38,4 +40,17 @@ export type SortDirection = 'asc' | 'desc'
 export interface TableSort {
   column: TableSortColumn
   direction: SortDirection
+}
+
+/**
+ * Una tarjeta asignada con el contexto de dónde vive (T12.4). Misma forma que
+ * `SearchCardHit`: las dos pantallas que cruzan tableros necesitan decir de
+ * cuál viene cada tarjeta, y la tarjeta sola no lo sabe.
+ */
+export interface MyCardHit {
+  card: Card
+  listId: string
+  listName: string
+  boardId: string
+  boardName: string
 }

@@ -3,6 +3,7 @@ import { useDebouncedValue, useDisclosure } from '@mantine/hooks'
 import { Spotlight, type SpotlightActionData } from '@mantine/spotlight'
 import {
   IconBell,
+  IconChecklist,
   IconLayoutKanban,
   IconListDetails,
   IconLogout,
@@ -18,6 +19,7 @@ import { useBoardLists } from '@/features/lists/hooks/use-board-lists'
 import { useSearch } from '@/features/search/hooks/use-search'
 import { SEARCH_ROUTE } from '@/features/search/route'
 import { MIN_SEARCH_LENGTH } from '@/features/search/types'
+import { MY_WORK_ROUTE } from '@/features/board-views/route'
 import { matchesQuery } from '@/features/search/utils/match-query'
 
 interface CommandPaletteProps {
@@ -67,9 +69,15 @@ export function CommandPalette({ onOpenNotifications }: CommandPaletteProps) {
   const actions = useMemo(() => {
     const trimmed = query.trim()
 
-    // TODO(T12.4): sumar acá "Ir a Mi trabajo" cuando exista esa pantalla. El
-    // ticket la pide, pero hoy no hay ruta a la que llevar.
     const commands: SpotlightActionData[] = [
+      {
+        id: 'go-my-work',
+        label: 'Ir a Mi trabajo',
+        description: 'Todo lo que tenés asignado, agrupado por vencimiento',
+        keywords: ['mi trabajo', 'asignadas', 'pendientes', 'todo'],
+        leftSection: <IconChecklist size={18} stroke={1.5} />,
+        onClick: () => navigate(MY_WORK_ROUTE),
+      },
       {
         id: 'go-boards',
         label: 'Ir a Mis tableros',

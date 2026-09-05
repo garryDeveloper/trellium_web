@@ -38,3 +38,40 @@
   letter-spacing: -0.01em;
   color: var(--tr-text-primary);
 }
+
+/* Enlace de navegación del header. Es texto y no un botón: navega, no ejecuta. */
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: var(--mantine-radius-sm);
+  color: var(--tr-text-secondary);
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 500;
+  text-decoration: none;
+  transition:
+    background-color var(--tr-motion-fast) var(--tr-motion-ease),
+    color var(--tr-motion-fast) var(--tr-motion-ease);
+}
+
+.navLink:hover {
+  background-color: var(--tr-surface-hover);
+  color: var(--tr-text-primary);
+}
+
+/* La pantalla activa se marca con el acento, no sólo con un fondo: es la única
+   forma de saber dónde estás sin leer la URL. */
+.navLinkActive {
+  background-color: var(--tr-accent-subtle);
+  color: var(--tr-accent);
+}
+
+/* Debajo de este ancho el buscador ya compite con la marca: el enlace se queda
+   con su ícono, y el nombre lo dice la pantalla al abrirse. */
+@media (max-width: 47.99em) {
+  .navLinkLabel {
+    display: none;
+  }
+}

@@ -1,0 +1,24 @@
+.groupHeader {
+  display: flex;
+  align-items: baseline;
+  gap: var(--mantine-spacing-xs);
+  margin-bottom: var(--mantine-spacing-sm);
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--tr-border-subtle);
+}
+
+.groupName {
+  margin: 0;
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--tr-text-secondary);
+}
+
+.groupCount {
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--tr-text-tertiary);
+}

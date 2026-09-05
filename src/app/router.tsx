@@ -8,6 +8,8 @@ import { BoardsPage } from '@/features/boards/pages/boards.page'
 import { BoardPage } from '@/features/boards/pages/board.page'
 import { SearchPage } from '@/features/search/pages/search.page'
 import { SEARCH_ROUTE } from '@/features/search/route'
+import { MyWorkPage } from '@/features/board-views/pages/my-work.page'
+import { MY_WORK_ROUTE } from '@/features/board-views/route'
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +40,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <BoardsPage /> },
       { path: 'boards/:boardId', element: <BoardPage /> },
+      { path: MY_WORK_ROUTE, element: <MyWorkPage /> },
       { path: SEARCH_ROUTE, element: <SearchPage /> },
     ],
   },
