@@ -1,0 +1,130 @@
+/* Igual que el canvas del tablero: el documento no scrollea, scrollea la tabla
+   dentro de su propio contenedor. */
+.shell {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  padding: var(--mantine-spacing-md) var(--mantine-spacing-lg);
+}
+
+/* El que scrollea es este, no el shell: el encabezado pegajoso se ancla al
+   ancestro que scrollea, y si fuera el shell la fila de encabezados se iría
+   con el resto. Altura acotada por el flex, de ahí el min-height: 0. */
+.scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.table {
+  background-color: var(--tr-surface-raised);
+  border: 1px solid var(--tr-border-subtle);
+  border-radius: var(--mantine-radius-md);
+}
+
+.table thead th {
+  background-color: var(--tr-surface-raised);
+  white-space: nowrap;
+}
+
+.row {
+  cursor: pointer;
+}
+
+/* Los disparadores de edición aparecen con el hover o el foco de la fila: en
+   reposo, la fila se lee como contenido, no como una barra de herramientas. */
+.rowAction {
+  opacity: 0;
+  transition: opacity var(--tr-motion-fast) var(--tr-motion-ease);
+}
+
+.row:hover .rowAction,
+.row:focus-within .rowAction {
+  opacity: 1;
+}
+
+.sortButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 600;
+  color: var(--tr-text-secondary);
+}
+
+.sortButton:hover {
+  color: var(--tr-text-primary);
+}
+
+/* El indicador de "esta columna se puede ordenar" sólo se insinúa: en reposo,
+   seis flechas compitiendo con los datos son ruido. */
+.sortHint {
+  opacity: 0;
+  transition: opacity var(--tr-motion-fast) var(--tr-motion-ease);
+}
+
+.sortButton:hover .sortHint,
+.sortButton:focus-visible .sortHint {
+  opacity: 0.6;
+}
+
+.titleColumn {
+  width: 40%;
+  min-width: 240px;
+}
+
+.dueColumn {
+  white-space: nowrap;
+}
+
+.titleCell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--mantine-font-size-sm);
+  color: var(--tr-text-primary);
+}
+
+.labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.empty {
+  color: var(--tr-text-tertiary);
+}
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-xs);
+  min-width: 96px;
+}
+
+.progressCount {
+  font-variant-numeric: tabular-nums;
+}
+
+.progressBar {
+  flex: 1;
+}
+
+.state {
+  flex: 1 1 auto;
+  padding: var(--mantine-spacing-xl);
+}
+
+@media (max-width: 640px) {
+  .shell {
+    padding-inline: var(--mantine-spacing-md);
+  }
+}

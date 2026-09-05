@@ -1,0 +1,18 @@
+.control {
+  flex-shrink: 0;
+  margin-right: var(--mantine-spacing-xs);
+}
+
+.option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Debajo del ancho donde la barra empieza a apretar, el segmentado se queda
+   con los iconos: el nombre de la vista lo dice el tooltip. */
+@media (max-width: 900px) {
+  .label {
+    display: none;
+  }
+}

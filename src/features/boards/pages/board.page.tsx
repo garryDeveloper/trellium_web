@@ -16,6 +16,10 @@ import { BoardNameInlineEdit } from '../components/board-name-inline-edit'
 import { BoardSettingsPanel } from '../components/board-settings-panel'
 import { BoardMembersPanel } from '../components/board-members-panel'
 import { BoardListsBoard } from '@/features/lists/components/board-lists-board'
+import { BoardViewSwitcher } from '@/features/board-views/components/board-view-switcher'
+import { BoardTableView } from '@/features/board-views/components/board-table-view'
+import { BoardCalendarPlaceholder } from '@/features/board-views/components/board-calendar-placeholder'
+import { useBoardView } from '@/features/board-views/hooks/use-board-view'
 import { BoardArchivePanel } from '../components/board-archive-panel'
 import { useBoardLists } from '@/features/lists/hooks/use-board-lists'
 import { useBoardCards } from '@/features/cards/hooks/use-board-cards'
@@ -46,6 +50,7 @@ export function BoardPage() {
   useTrackRecentBoard(board?.id)
 
   const boardFilter = useBoardFilter()
+  const { view, setView, isResolving: isResolvingView } = useBoardView(board?.id)
   const membersQuery = useBoardMembers(board?.id)
   const labelsQuery = useBoardLabels(board?.id)
 
@@ -103,7 +108,7 @@ export function BoardPage() {
     })
   }
 
-  if (isLoading) {
+  if (isLoading || isResolvingView) {
     return (
       <Center py={80}>
         <Loader />
@@ -151,6 +156,7 @@ export function BoardPage() {
         </div>
 
         <div className={classes.toolbarActions}>
+          <BoardViewSwitcher view={view} onChange={setView} />
           <BoardFilterPopover
             members={membersQuery.data ?? []}
             labels={labelsQuery.data ?? []}
@@ -193,7 +199,16 @@ export function BoardPage() {
         />
       )}
 
-      <BoardListsBoard boardId={board.id} onOpenCard={openCard} />
+      {/* Las tres vistas son proyecciones de las mismas queries: el filtro, su
+          resumen y el detalle de tarjeta son los mismos en las tres, y sólo
+          cambia el cuerpo. */}
+      {view === 'board' && (
+        <BoardListsBoard boardId={board.id} onOpenCard={openCard} />
+      )}
+      {view === 'table' && (
+        <BoardTableView boardId={board.id} onOpenCard={openCard} />
+      )}
+      {view === 'calendar' && <BoardCalendarPlaceholder />}
 
       <CardDetailPanel
         card={selectedCard}
