@@ -61,3 +61,16 @@ export function toDateTimeLocalValue(iso: string): string {
 export function fromDateTimeLocalValue(value: string): string {
   return new Date(value).toISOString()
 }
+
+const dueTimeFormatter = new Intl.DateTimeFormat('es-AR', {
+  hour: '2-digit',
+  minute: '2-digit',
+})
+
+/**
+ * Sólo la hora, para el calendario: el día ya lo dice la celda donde está la
+ * tarjeta, y repetirlo en cada chip sería ruido.
+ */
+export function formatDueTime(dueDate: string): string {
+  return dueTimeFormatter.format(new Date(dueDate))
+}

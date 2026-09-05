@@ -18,7 +18,7 @@ import { BoardMembersPanel } from '../components/board-members-panel'
 import { BoardListsBoard } from '@/features/lists/components/board-lists-board'
 import { BoardViewSwitcher } from '@/features/board-views/components/board-view-switcher'
 import { BoardTableView } from '@/features/board-views/components/board-table-view'
-import { BoardCalendarPlaceholder } from '@/features/board-views/components/board-calendar-placeholder'
+import { BoardCalendarView } from '@/features/board-views/components/board-calendar-view'
 import { useBoardView } from '@/features/board-views/hooks/use-board-view'
 import { BoardArchivePanel } from '../components/board-archive-panel'
 import { useBoardLists } from '@/features/lists/hooks/use-board-lists'
@@ -208,7 +208,9 @@ export function BoardPage() {
       {view === 'table' && (
         <BoardTableView boardId={board.id} onOpenCard={openCard} />
       )}
-      {view === 'calendar' && <BoardCalendarPlaceholder />}
+      {view === 'calendar' && (
+        <BoardCalendarView boardId={board.id} onOpenCard={openCard} />
+      )}
 
       <CardDetailPanel
         card={selectedCard}
