@@ -1,13 +1,18 @@
 export const BOARD_VIEWS = ['board', 'table', 'calendar'] as const
 export type BoardView = (typeof BOARD_VIEWS)[number]
 
-export type BoardGroupBy = 'list' | 'assignee' | 'label' | 'due_date'
+export const BOARD_GROUP_BYS = ['list', 'assignee', 'label', 'due_date'] as const
+export type BoardGroupBy = (typeof BOARD_GROUP_BYS)[number]
 
-/**
- * Lo que el servidor recuerda por tablero y por usuario (T12.1, T12.3).
- * `groupBy` todavía no tiene UI — es de T12.3 —, pero viaja en el contrato
- * desde ahora para no versionar el endpoint cuando llegue.
- */
+/** Cómo se nombra cada agrupación en el selector y en el aviso. */
+export const BOARD_GROUP_BY_LABEL: Record<BoardGroupBy, string> = {
+  list: 'Lista',
+  assignee: 'Miembro',
+  label: 'Etiqueta',
+  due_date: 'Vencimiento',
+}
+
+/** Lo que el servidor recuerda por tablero y por usuario (T12.1, T12.3). */
 export interface BoardViewPreferences {
   view: BoardView
   groupBy: BoardGroupBy

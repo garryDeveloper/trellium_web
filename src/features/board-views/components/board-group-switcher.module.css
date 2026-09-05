@@ -1,0 +1,8 @@
+/* Debajo del ancho donde la barra aprieta, el botón se queda con "Agrupar" y el
+   ícono, que ya dice por qué: el valor lo confirma el menú al abrirlo. Mismo
+   criterio que el selector de vista. */
+@media (max-width: 900px) {
+  .value {
+    display: none;
+  }
+}

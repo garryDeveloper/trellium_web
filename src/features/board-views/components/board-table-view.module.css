@@ -128,3 +128,40 @@
     padding-inline: var(--mantine-spacing-md);
   }
 }
+
+/* Fila de encabezado de grupo (T12.3). Es un `th` dentro del cuerpo: separa
+   bloques de filas, así que no se comporta como una fila de datos — no se
+   resalta al pasar el mouse ni abre nada. */
+.groupRow th {
+  position: static;
+  padding-block: 8px;
+  background-color: var(--tr-surface-sunken);
+  border-top: 1px solid var(--tr-border-subtle);
+}
+
+.groupRow:hover th {
+  background-color: var(--tr-surface-sunken);
+}
+
+.groupHeader {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--mantine-spacing-xs);
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 600;
+  color: var(--tr-text-primary);
+}
+
+/* "Sin asignar" y "Sin etiqueta" son la ausencia del dato, no un valor más. */
+.groupNameEmpty {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--tr-text-secondary);
+}
+
+.groupCount {
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--tr-text-tertiary);
+}

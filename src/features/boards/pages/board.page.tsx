@@ -10,6 +10,7 @@ import { useBoardFilter } from '../hooks/use-board-filter'
 import { useBoardMembers } from '../hooks/use-board-members'
 import { useTrackRecentBoard } from '../hooks/use-recent-boards'
 import { countCards, filterCardsByList } from '../utils/board-filter'
+import { countMultiGroupCards } from '@/features/board-views/utils/card-groups'
 import { BoardFilterPopover } from '../components/board-filter-popover'
 import { BoardFilterSummary } from '../components/board-filter-summary'
 import { BoardNameInlineEdit } from '../components/board-name-inline-edit'
@@ -17,6 +18,9 @@ import { BoardSettingsPanel } from '../components/board-settings-panel'
 import { BoardMembersPanel } from '../components/board-members-panel'
 import { BoardListsBoard } from '@/features/lists/components/board-lists-board'
 import { BoardViewSwitcher } from '@/features/board-views/components/board-view-switcher'
+import { BoardGroupSwitcher } from '@/features/board-views/components/board-group-switcher'
+import { BoardGroupedColumns } from '@/features/board-views/components/board-grouped-columns'
+import { BoardGroupingNotice } from '@/features/board-views/components/board-grouping-notice'
 import { BoardTableView } from '@/features/board-views/components/board-table-view'
 import { BoardCalendarView } from '@/features/board-views/components/board-calendar-view'
 import { useBoardView } from '@/features/board-views/hooks/use-board-view'
@@ -50,7 +54,13 @@ export function BoardPage() {
   useTrackRecentBoard(board?.id)
 
   const boardFilter = useBoardFilter()
-  const { view, setView, isResolving: isResolvingView } = useBoardView(board?.id)
+  const {
+    view,
+    setView,
+    groupBy,
+    setGroupBy,
+    isResolving: isResolvingView,
+  } = useBoardView(board?.id)
   const membersQuery = useBoardMembers(board?.id)
   const labelsQuery = useBoardLabels(board?.id)
 
@@ -61,6 +71,25 @@ export function BoardPage() {
     () => countCards(filterCardsByList(cardsByList, boardFilter.filter)),
     [cardsByList, boardFilter.filter],
   )
+  /*
+    "Por lista" no es una agrupación: es el tablero de siempre. Traducirlo a
+    `null` acá deja a las vistas con un solo caso que atender en vez de repetir
+    la comparación en cada una.
+  */
+  const grouping = groupBy === 'list' ? null : groupBy
+  const multiGroupCount = useMemo(
+    () =>
+      grouping
+        ? countMultiGroupCards(
+            grouping,
+            Object.values(
+              filterCardsByList(cardsByList, boardFilter.filter),
+            ).flat(),
+          )
+        : 0,
+    [grouping, cardsByList, boardFilter.filter],
+  )
+
   const activeCard = selectedCardId
     ? Object.values(cardsByList)
         .flat()
@@ -157,6 +186,12 @@ export function BoardPage() {
 
         <div className={classes.toolbarActions}>
           <BoardViewSwitcher view={view} onChange={setView} />
+          {/* El calendario ya agrupa por día: un segundo criterio encima no
+              tendría dónde aplicarse (criterio de T12.3, que nombra Tablero y
+              Tabla). */}
+          {view !== 'calendar' && (
+            <BoardGroupSwitcher groupBy={groupBy} onChange={setGroupBy} />
+          )}
           <BoardFilterPopover
             members={membersQuery.data ?? []}
             labels={labelsQuery.data ?? []}
@@ -199,14 +234,34 @@ export function BoardPage() {
         />
       )}
 
+      {grouping && view !== 'calendar' && (
+        <BoardGroupingNotice
+          grouping={grouping}
+          view={view}
+          multiGroupCount={multiGroupCount}
+          onGroupByList={() => setGroupBy('list')}
+        />
+      )}
+
       {/* Las tres vistas son proyecciones de las mismas queries: el filtro, su
           resumen y el detalle de tarjeta son los mismos en las tres, y sólo
           cambia el cuerpo. */}
-      {view === 'board' && (
-        <BoardListsBoard boardId={board.id} onOpenCard={openCard} />
-      )}
+      {view === 'board' &&
+        (grouping ? (
+          <BoardGroupedColumns
+            boardId={board.id}
+            grouping={grouping}
+            onOpenCard={openCard}
+          />
+        ) : (
+          <BoardListsBoard boardId={board.id} onOpenCard={openCard} />
+        ))}
       {view === 'table' && (
-        <BoardTableView boardId={board.id} onOpenCard={openCard} />
+        <BoardTableView
+          boardId={board.id}
+          grouping={grouping}
+          onOpenCard={openCard}
+        />
       )}
       {view === 'calendar' && (
         <BoardCalendarView boardId={board.id} onOpenCard={openCard} />

@@ -1,0 +1,91 @@
+/* Mismo canvas que el tablero por listas: scroll horizontal propio, altura
+   acotada por el shell. */
+.canvas {
+  display: flex;
+  align-items: flex-start;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: var(--mantine-spacing-md);
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: var(--mantine-spacing-md) var(--mantine-spacing-lg);
+  scrollbar-gutter: stable;
+  overscroll-behavior-x: contain;
+}
+
+/* Misma especie que la columna de lista — contenedor hundido, definido por
+   relleno — para que agrupar se lea como el mismo tablero mirado de otra forma
+   y no como otra pantalla. */
+.column {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 var(--tr-column-width);
+  max-height: 100%;
+  border-radius: var(--mantine-radius-lg);
+  background-color: var(--tr-surface-sunken);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 6px;
+  min-width: 0;
+  padding: 10px 12px 8px;
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 600;
+  color: var(--tr-text-primary);
+}
+
+/* "Sin asignar" y "Sin etiqueta" son la ausencia del dato, no un valor más: se
+   distinguen del resto de los encabezados. */
+.nameEmpty {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--tr-text-secondary);
+}
+
+.count {
+  flex-shrink: 0;
+  padding-inline: 2px;
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--tr-text-tertiary);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  gap: var(--mantine-spacing-sm);
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  padding: 0 10px 10px;
+}
+
+.state {
+  flex: 1 1 auto;
+  padding: var(--mantine-spacing-xl) var(--mantine-spacing-lg);
+}
+
+@media (max-width: 640px) {
+  .canvas {
+    padding-inline: var(--mantine-spacing-md);
+    scroll-snap-type: x mandatory;
+  }
+
+  .column {
+    flex-basis: calc(100vw - 2 * var(--mantine-spacing-md));
+    scroll-snap-align: start;
+  }
+}

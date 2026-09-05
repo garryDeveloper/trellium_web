@@ -1,0 +1,29 @@
+/* Hermano de la toolbar en el flex column del tablero, como la barra de filtro:
+   empuja el contenido hacia abajo en vez de flotar encima. Va en gris y no en
+   el acento de la barra de filtro — con las dos puestas, dos franjas del mismo
+   color compiten y ninguna se lee. */
+.bar {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: var(--mantine-spacing-sm);
+  padding: 6px var(--mantine-spacing-lg);
+  border-bottom: 1px solid var(--tr-border-subtle);
+  background-color: var(--tr-surface-sunken);
+}
+
+.icon {
+  flex-shrink: 0;
+  color: var(--tr-text-tertiary);
+}
+
+.text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+@media (max-width: 640px) {
+  .bar {
+    padding-inline: var(--mantine-spacing-md);
+  }
+}

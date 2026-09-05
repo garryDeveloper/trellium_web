@@ -1,14 +1,11 @@
 import {
-  Avatar,
   Center,
   Loader,
-  Progress,
   Stack,
   Table,
   Text,
   ThemeIcon,
   Title,
-  Tooltip,
   UnstyledButton,
 } from '@mantine/core'
 import {
@@ -17,24 +14,27 @@ import {
   IconChevronUp,
   IconTable,
 } from '@tabler/icons-react'
-import { useMemo } from 'react'
+import { Fragment, useMemo } from 'react'
 import { useBoardFilter } from '@/features/boards/hooks/use-board-filter'
+import { useBoardMembers } from '@/features/boards/hooks/use-board-members'
 import { useBoardCards } from '@/features/cards/hooks/use-board-cards'
 import type { Card } from '@/features/cards/types'
 import { LabelChip } from '@/features/labels/components/label-chip'
+import { useBoardLabels } from '@/features/labels/hooks/use-board-labels'
 import { useBoardLists } from '@/features/lists/hooks/use-board-lists'
 import { useTableSort } from '../hooks/use-table-sort'
 import type { TableSort, TableSortColumn } from '../types'
+import { buildCardGroups, type CardGrouping } from '../utils/card-groups'
 import { buildTableRows, sortTableRows } from '../utils/table-rows'
-import { TableDueDateCell } from './table-due-date-cell'
-import { TableTitleCell } from './table-title-cell'
+import { TableCardRow } from './table-card-row'
 import classes from './board-table-view.module.css'
 
-const MAX_VISIBLE_ASSIGNEES = 3
-const MAX_VISIBLE_LABELS = 3
+const COLUMN_COUNT = 6
 
 interface BoardTableViewProps {
   boardId: string
+  /** `null` es la tabla plana: una fila por tarjeta, sin encabezados de grupo. */
+  grouping: CardGrouping | null
   onOpenCard: (card: Card) => void
 }
 
@@ -84,16 +84,48 @@ function SortableHeader({ column, label, sort, onSort }: SortableHeaderProps) {
  * — mismas queries de listas y tarjetas —, así que cambiar de vista no dispara
  * red y editar acá se refleja allá sin trabajo extra.
  */
-export function BoardTableView({ boardId, onOpenCard }: BoardTableViewProps) {
+export function BoardTableView({
+  boardId,
+  grouping,
+  onOpenCard,
+}: BoardTableViewProps) {
   const listsQuery = useBoardLists(boardId, 'active')
   const lists = useMemo(() => listsQuery.data ?? [], [listsQuery.data])
   const { cardsByList, isLoading: isLoadingCards } = useBoardCards(lists)
+  const membersQuery = useBoardMembers(boardId)
+  const labelsQuery = useBoardLabels(boardId)
   const { filter, isActive: isFiltered } = useBoardFilter()
   const { sort, toggleSort } = useTableSort()
 
   const rows = useMemo(
     () => sortTableRows(buildTableRows(lists, cardsByList, filter), sort),
     [lists, cardsByList, filter, sort],
+  )
+
+  /*
+    Los grupos se arman sobre las filas YA ordenadas, así que el orden elegido
+    sigue valiendo dentro de cada grupo. La columna "Lista" no cambia al
+    agrupar: es un atributo de la tarjeta, y agrupar no la mueve de lista
+    (`domain.md`, reglas 3 y 4).
+  */
+  const groups = useMemo(
+    () =>
+      grouping
+        ? buildCardGroups(
+            grouping,
+            rows.map((row) => row.card),
+            membersQuery.data ?? [],
+            labelsQuery.data ?? [],
+          )
+        : null,
+    [grouping, rows, membersQuery.data, labelsQuery.data],
+  )
+
+  // Agrupar por miembro o etiqueta repite tarjetas, así que el nombre de la
+  // lista se busca por id en vez de arrastrarlo dentro del grupo.
+  const listNameByCardId = useMemo(
+    () => new Map(rows.map((row) => [row.card.id, row.listName])),
+    [rows],
   )
 
   if (listsQuery.isLoading || isLoadingCards) {
@@ -159,115 +191,50 @@ export function BoardTableView({ boardId, onOpenCard }: BoardTableViewProps) {
           </Table.Thead>
 
           <Table.Tbody>
-            {rows.map(({ card, listName }) => {
-              const visibleAssignees = card.assignees.slice(
-                0,
-                MAX_VISIBLE_ASSIGNEES,
-              )
-              const hiddenAssignees =
-                card.assignees.length - visibleAssignees.length
-              const visibleLabels = card.labels.slice(0, MAX_VISIBLE_LABELS)
-              const hiddenLabels = card.labels.length - visibleLabels.length
-              const progress = card.checklistProgress
+            {groups
+              ? groups.map((group) => (
+                  <Fragment key={group.key}>
+                    <Table.Tr className={classes.groupRow}>
+                      <Table.Th colSpan={COLUMN_COUNT} scope="colgroup">
+                        <span className={classes.groupHeader}>
+                          {group.label ? (
+                            <LabelChip label={group.label} size="xs" />
+                          ) : (
+                            <span
+                              className={
+                                group.isEmptyBucket
+                                  ? classes.groupNameEmpty
+                                  : undefined
+                              }
+                            >
+                              {group.name}
+                            </span>
+                          )}
+                          <span className={classes.groupCount}>
+                            {group.cards.length}
+                          </span>
+                        </span>
+                      </Table.Th>
+                    </Table.Tr>
 
-              return (
-                <Table.Tr
-                  key={card.id}
-                  className={classes.row}
-                  tabIndex={0}
-                  aria-label={`Abrir tarjeta ${card.title}`}
-                  onClick={() => onOpenCard(card)}
-                  onKeyDown={(event) => {
-                    if (event.target !== event.currentTarget) return
-                    if (event.key === 'Enter' || event.key === ' ') {
-                      event.preventDefault()
-                      onOpenCard(card)
-                    }
-                  }}
-                >
-                  <Table.Td className={classes.titleColumn}>
-                    <TableTitleCell card={card} />
-                  </Table.Td>
-
-                  <Table.Td>
-                    <Text size="sm" c="dimmed">
-                      {listName}
-                    </Text>
-                  </Table.Td>
-
-                  <Table.Td>
-                    {card.assignees.length === 0 ? (
-                      <span className={classes.empty}>—</span>
-                    ) : (
-                      <Avatar.Group spacing="xs">
-                        {visibleAssignees.map((assignee) => (
-                          <Tooltip key={assignee.id} label={assignee.name}>
-                            <Avatar
-                              name={assignee.name}
-                              color="initials"
-                              radius="xl"
-                              size={24}
-                            />
-                          </Tooltip>
-                        ))}
-                        {hiddenAssignees > 0 && (
-                          <Avatar radius="xl" size={24} color="gray">
-                            +{hiddenAssignees}
-                          </Avatar>
-                        )}
-                      </Avatar.Group>
-                    )}
-                  </Table.Td>
-
-                  <Table.Td>
-                    {card.labels.length === 0 ? (
-                      <span className={classes.empty}>—</span>
-                    ) : (
-                      <div className={classes.labels}>
-                        {visibleLabels.map((label) => (
-                          <LabelChip key={label.id} label={label} size="xs" />
-                        ))}
-                        {hiddenLabels > 0 && (
-                          <Text size="xs" c="dimmed">
-                            +{hiddenLabels}
-                          </Text>
-                        )}
-                      </div>
-                    )}
-                  </Table.Td>
-
-                  <Table.Td className={classes.dueColumn}>
-                    <TableDueDateCell card={card} />
-                  </Table.Td>
-
-                  <Table.Td>
-                    {progress ? (
-                      <div className={classes.progress}>
-                        <Text size="xs" c="dimmed" className={classes.progressCount}>
-                          {progress.completed}/{progress.total}
-                        </Text>
-                        <Progress
-                          value={
-                            progress.total === 0
-                              ? 0
-                              : (progress.completed / progress.total) * 100
-                          }
-                          size="sm"
-                          color={
-                            progress.completed === progress.total
-                              ? 'success'
-                              : 'primary'
-                          }
-                          className={classes.progressBar}
-                        />
-                      </div>
-                    ) : (
-                      <span className={classes.empty}>—</span>
-                    )}
-                  </Table.Td>
-                </Table.Tr>
-              )
-            })}
+                    {group.cards.map((card) => (
+                      <TableCardRow
+                        key={`${group.key}:${card.id}`}
+                        card={card}
+                        listName={listNameByCardId.get(card.id) ?? ''}
+                        onOpen={() => onOpenCard(card)}
+                      />
+                    ))}
+                  </Fragment>
+                ))
+              : rows.map((row) => (
+                  <TableCardRow
+                    key={row.card.id}
+                    card={row.card}
+                    listName={row.listName}
+                    onOpen={() => onOpenCard(row.card)}
+                  />
+                ))}
           </Table.Tbody>
         </Table>
       </Table.ScrollContainer>
