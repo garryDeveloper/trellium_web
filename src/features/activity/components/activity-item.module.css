@@ -1,0 +1,45 @@
+/* Misma grilla que el comentario (gutter + contenido) para que la línea de
+   tiempo se lea como una sola columna y no como dos listas intercaladas. */
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--mantine-spacing-sm);
+}
+
+/* Del ancho del avatar del comentario (26px, `Avatar size="sm"`), para que los
+   dos tipos de fila arranquen en la misma vertical. */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background-color: var(--tr-surface-sunken);
+  color: var(--tr-text-tertiary);
+}
+
+.text {
+  min-width: 0;
+  padding-top: 3px;
+  line-height: 1.5;
+}
+
+.actor {
+  font-weight: 500;
+  color: var(--tr-text-primary);
+}
+
+/* Los valores del cambio se destacan del resto de la frase sin gritar: es lo
+   que uno busca al escanear el historial. */
+.value {
+  font-weight: 500;
+  color: var(--tr-text-secondary);
+}
+
+.date {
+  white-space: nowrap;
+  font-size: var(--mantine-font-size-xs);
+  color: var(--tr-text-tertiary);
+}

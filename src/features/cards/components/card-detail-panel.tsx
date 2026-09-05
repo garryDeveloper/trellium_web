@@ -15,7 +15,7 @@ import { IconArchive, IconRestore, IconX } from '@tabler/icons-react'
 import { useBoardMembers } from '@/features/boards/hooks/use-board-members'
 import { useBoardLabels } from '@/features/labels/hooks/use-board-labels'
 import { CardChecklistsSection } from '@/features/checklists/components/card-checklists-section'
-import { CardCommentsSection } from '@/features/comments/components/card-comments-section'
+import { CardActivitySection } from '@/features/activity/components/card-activity-section'
 import { CardAttachmentsSection } from '@/features/attachments/components/card-attachments-section'
 import { CardTitleInlineEdit } from './card-title-inline-edit'
 import { CardDescriptionEditor } from './card-description-editor'
@@ -137,7 +137,7 @@ export function CardDetailPanel({
             <Divider />
 
             <div className={classes.reading}>
-              <CardCommentsSection cardId={card.id} boardId={boardId} />
+              <CardActivitySection cardId={card.id} boardId={boardId} />
             </div>
 
             <Divider />
