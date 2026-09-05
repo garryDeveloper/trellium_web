@@ -14,7 +14,9 @@ import { Link, Outlet } from 'react-router-dom'
 import { useAuthStore } from '@/features/auth/store/auth.store'
 import { useLogout } from '@/features/auth/hooks/use-logout'
 import { BrandMark } from './brand-mark'
+import { CommandPalette } from './command-palette'
 import { ColorSchemeToggle } from './color-scheme-toggle'
+import { GlobalSearch } from '@/features/search/components/global-search'
 import { NotificationsPanel } from '@/features/notifications/components/notifications-panel'
 import { useNotifications } from '@/features/notifications/hooks/use-notifications'
 import classes from './app-layout.module.css'
@@ -42,6 +44,8 @@ export function AppLayout() {
             </span>
             <span className={classes.brandName}>Trellium</span>
           </UnstyledButton>
+
+          <GlobalSearch />
 
           <Group gap={4} wrap="nowrap">
             <ColorSchemeToggle />
@@ -101,6 +105,10 @@ export function AppLayout() {
         opened={notificationsOpened}
         onClose={closeNotifications}
       />
+
+      {/* La paleta abre el panel de notificaciones, que lo controla este
+          layout: por eso recibe el handler en vez de tener el suyo. */}
+      <CommandPalette onOpenNotifications={openNotifications} />
     </AppShell>
   )
 }

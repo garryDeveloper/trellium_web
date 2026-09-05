@@ -5,6 +5,7 @@ import '@fontsource/inter/500.css'
 import '@fontsource/inter/600.css'
 import '@mantine/core/styles.layer.css'
 import '@mantine/notifications/styles.layer.css'
+import '@mantine/spotlight/styles.layer.css'
 import './index.css'
 import { AppProviders } from './app/providers'
 

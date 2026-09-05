@@ -8,6 +8,7 @@ import { useBoardLabels } from '@/features/labels/hooks/use-board-labels'
 import { useBoard } from '../hooks/use-board'
 import { useBoardFilter } from '../hooks/use-board-filter'
 import { useBoardMembers } from '../hooks/use-board-members'
+import { useTrackRecentBoard } from '../hooks/use-recent-boards'
 import { countCards, filterCardsByList } from '../utils/board-filter'
 import { BoardFilterPopover } from '../components/board-filter-popover'
 import { BoardFilterSummary } from '../components/board-filter-summary'
@@ -18,6 +19,7 @@ import { BoardListsBoard } from '@/features/lists/components/board-lists-board'
 import { BoardArchivePanel } from '../components/board-archive-panel'
 import { useBoardLists } from '@/features/lists/hooks/use-board-lists'
 import { useBoardCards } from '@/features/cards/hooks/use-board-cards'
+import { useBoardArchivedCards } from '@/features/cards/hooks/use-board-archived-cards'
 import { CardDetailPanel } from '@/features/cards/components/card-detail-panel'
 import type { Card } from '@/features/cards/types'
 import classes from './board-page.module.css'
@@ -39,6 +41,10 @@ export function BoardPage() {
     listsQuery.data ?? [],
   )
 
+  // Accesos recientes del command palette (T11.3). Se registra el tablero
+  // resuelto, no el id de la URL: un id inexistente no es una visita.
+  useTrackRecentBoard(board?.id)
+
   const boardFilter = useBoardFilter()
   const membersQuery = useBoardMembers(board?.id)
   const labelsQuery = useBoardLabels(board?.id)
@@ -50,11 +56,36 @@ export function BoardPage() {
     () => countCards(filterCardsByList(cardsByList, boardFilter.filter)),
     [cardsByList, boardFilter.filter],
   )
-  const selectedCard = selectedCardId
+  const activeCard = selectedCardId
     ? Object.values(cardsByList)
         .flat()
         .find((card) => card.id === selectedCardId)
     : undefined
+
+  /**
+   * Un resultado de la búsqueda global (T11.2) puede apuntar a una tarjeta
+   * archivada, y el tablero sólo tiene en cache las activas. Las archivadas se
+   * piden recién cuando la tarjeta pedida por URL no aparece entre ellas: es el
+   * caso raro, no algo que deba pagar cada apertura del tablero.
+   */
+  const needsArchivedLookup =
+    !!selectedCardId && !activeCard && !isLoadingCards
+  const archivedListsQuery = useBoardLists(
+    needsArchivedLookup ? board?.id : undefined,
+    'archived',
+  )
+  const allLists = useMemo(
+    () => [...(listsQuery.data ?? []), ...(archivedListsQuery.data ?? [])],
+    [listsQuery.data, archivedListsQuery.data],
+  )
+  const { cards: archivedCards, isLoading: isLoadingArchivedCards } =
+    useBoardArchivedCards(needsArchivedLookup ? allLists : [])
+
+  const selectedCard =
+    activeCard ??
+    (selectedCardId
+      ? archivedCards.find((card) => card.id === selectedCardId)
+      : undefined)
 
   const openCard = (card: Card) => {
     setSearchParams((prev) => {
@@ -167,7 +198,9 @@ export function BoardPage() {
       <CardDetailPanel
         card={selectedCard}
         boardId={board.id}
-        isLoading={isLoadingCards}
+        isLoading={
+          isLoadingCards || (needsArchivedLookup && isLoadingArchivedCards)
+        }
         opened={!!selectedCardId}
         onClose={closeCard}
       />

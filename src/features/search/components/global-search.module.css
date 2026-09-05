@@ -1,0 +1,7 @@
+/* En el header el buscador comparte fila con la marca y las acciones: crece
+   cuando hay lugar y no pasa de un ancho de lectura cómodo. */
+.form {
+  flex: 1 1 auto;
+  max-width: 420px;
+  min-width: 0;
+}

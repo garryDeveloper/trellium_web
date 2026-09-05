@@ -3,6 +3,7 @@ import { ActionIcon, Group, Textarea, UnstyledButton } from '@mantine/core'
 import { IconPlus, IconX } from '@tabler/icons-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useSearchParams } from 'react-router-dom'
 import { useCreateCard } from '../hooks/use-create-card'
 import {
   cardTitleSchema,
@@ -16,7 +17,18 @@ interface CreateCardInlineFormProps {
 
 export function CreateCardInlineForm({ listId }: CreateCardInlineFormProps) {
   const [creating, setCreating] = useState(false)
+  const [searchParams, setSearchParams] = useSearchParams()
   const createCardMutation = useCreateCard(listId)
+
+  /**
+   * El command palette (T11.3) pide "crear tarjeta en este tablero" abriendo
+   * este formulario por URL, con el mismo patrón con el que el tablero ya abre
+   * una tarjeta con `?card=`. La alternativa —un handler bajando desde el
+   * layout hasta la columna— cruzaría media aplicación para decir una cosa que
+   * la URL ya sabe expresar.
+   */
+  const openedFromUrl = searchParams.get('newCard') === listId
+  const isCreating = creating || openedFromUrl
 
   const {
     register,
@@ -28,6 +40,11 @@ export function CreateCardInlineForm({ listId }: CreateCardInlineFormProps) {
   const close = () => {
     reset()
     setCreating(false)
+    if (openedFromUrl) {
+      const next = new URLSearchParams(searchParams)
+      next.delete('newCard')
+      setSearchParams(next, { replace: true })
+    }
   }
 
   const onSubmit = (values: CardTitleFormValues) => {
@@ -36,7 +53,7 @@ export function CreateCardInlineForm({ listId }: CreateCardInlineFormProps) {
     })
   }
 
-  if (!creating) {
+  if (!isCreating) {
     return (
       <UnstyledButton onClick={() => setCreating(true)} className={classes.trigger}>
         <IconPlus size={16} />

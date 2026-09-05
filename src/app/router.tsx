@@ -6,6 +6,8 @@ import { AppLayout } from './app-layout'
 import { LoginPage } from '@/features/auth/pages/login.page'
 import { BoardsPage } from '@/features/boards/pages/boards.page'
 import { BoardPage } from '@/features/boards/pages/board.page'
+import { SearchPage } from '@/features/search/pages/search.page'
+import { SEARCH_ROUTE } from '@/features/search/route'
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +38,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <BoardsPage /> },
       { path: 'boards/:boardId', element: <BoardPage /> },
+      { path: SEARCH_ROUTE, element: <SearchPage /> },
     ],
   },
   {
